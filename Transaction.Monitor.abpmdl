@@ -1,0 +1,85 @@
+{
+  "template": "app",
+  "imports": {
+    "Volo.Abp.Account": {
+      "version": "8.2.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.OpenIddict": {
+      "version": "8.2.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.Identity": {
+      "version": "8.2.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.TenantManagement": {
+      "version": "8.2.2",
+      "isInstalled": true
+    }
+  },
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "Transaction.Monitor.Application": {
+      "path": "src/Transaction.Monitor.Application/Transaction.Monitor.Application.abppkg",
+      "folder": "src"
+    },
+    "Transaction.Monitor.Application.Tests": {
+      "path": "test/Transaction.Monitor.Application.Tests/Transaction.Monitor.Application.Tests.abppkg",
+      "folder": "test"
+    },
+    "Transaction.Monitor.MongoDB": {
+      "path": "src/Transaction.Monitor.MongoDB/Transaction.Monitor.MongoDB.abppkg",
+      "folder": "src"
+    },
+    "Transaction.Monitor.MongoDB.Tests": {
+      "path": "test/Transaction.Monitor.MongoDB.Tests/Transaction.Monitor.MongoDB.Tests.abppkg",
+      "folder": "test"
+    },
+    "Transaction.Monitor.Domain.Shared": {
+      "path": "src/Transaction.Monitor.Domain.Shared/Transaction.Monitor.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "Transaction.Monitor.Application.Contracts": {
+      "path": "src/Transaction.Monitor.Application.Contracts/Transaction.Monitor.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "Transaction.Monitor.HttpApi": {
+      "path": "src/Transaction.Monitor.HttpApi/Transaction.Monitor.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "Transaction.Monitor.HttpApi.Client": {
+      "path": "src/Transaction.Monitor.HttpApi.Client/Transaction.Monitor.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "Transaction.Monitor.TestBase": {
+      "path": "test/Transaction.Monitor.TestBase/Transaction.Monitor.TestBase.abppkg",
+      "folder": "test"
+    },
+    "Transaction.Monitor.Domain.Tests": {
+      "path": "test/Transaction.Monitor.Domain.Tests/Transaction.Monitor.Domain.Tests.abppkg",
+      "folder": "test"
+    },
+    "Transaction.Monitor.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/Transaction.Monitor.HttpApi.Client.ConsoleTestApp/Transaction.Monitor.HttpApi.Client.ConsoleTestApp.abppkg",
+      "folder": "test"
+    },
+    "Transaction.Monitor.DbMigrator": {
+      "path": "src/Transaction.Monitor.DbMigrator/Transaction.Monitor.DbMigrator.abppkg",
+      "folder": "src"
+    },
+    "Transaction.Monitor.HttpApi.Host": {
+      "path": "src/Transaction.Monitor.HttpApi.Host/Transaction.Monitor.HttpApi.Host.abppkg",
+      "folder": "src"
+    },
+    "Transaction.Monitor.Domain": {
+      "path": "src/Transaction.Monitor.Domain/Transaction.Monitor.Domain.abppkg",
+      "folder": "src"
+    }
+  }
+}

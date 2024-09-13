@@ -1,0 +1,37 @@
+{
+  "id": "90c2f71c-30ed-4d64-b2e2-fc8aa6c08929",
+  "template": "app",
+  "versions": {
+    "AbpFramework": "8.2.2",
+    "AbpStudio": "0.7.9"
+  },
+  "modules": {
+    "Transaction.Monitor": {
+      "path": "Transaction.Monitor.abpmdl"
+    }
+  },
+  "runProfiles": {
+    "Default": {
+      "path": "etc/abp-studio/run-profiles/Default.abprun.json"
+    }
+  },
+  "options": {
+    "httpRequests": {
+      "ignoredUrls": [
+        "^/metrics$"
+      ]
+    }
+  },
+  "creatingStudioConfiguration": {
+    "template": "app",
+    "createdAbpStudioVersion": "0.7.9",
+    "tiered": "false",
+    "uiFramework": "no-ui",
+    "databaseProvider": "mongodb",
+    "theme": "leptonx-lite",
+    "themeStyle": "system",
+    "mobileFramework": "none",
+    "publicWebsite": "false",
+    "socialLogin": ""
+  }
+}
