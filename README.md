@@ -16,3 +16,7 @@ Notice：
 
 * [.NET8.0+ SDK](https://dotnet.microsoft.com/download/dotnet)
 * [Node v18 or 20](https://nodejs.org/en)
+
+### Build for docker
+docker build -t game-monitor-api -f ./Dockerfile.api .
+docker run -dit -p 44393:44393 -v ./log:/App/bin/HttpApi/Logs --name game-monitor-api game-monitor-api

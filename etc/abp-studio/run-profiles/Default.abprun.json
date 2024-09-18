@@ -2,7 +2,7 @@
   "applications": {
     "Transaction.Monitor.HttpApi.Host": {
       "type": "dotnet-project",
-      "launchUrl": "http://localhost:44393",
+      "launchUrl": "http://*:44393",
       "path": "../../../src/Transaction.Monitor.HttpApi.Host/Transaction.Monitor.HttpApi.Host.csproj",
       "kubernetesService": ".*-httpapihost$"  
     }
