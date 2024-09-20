@@ -1,8 +1,0 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0
-
-WORKDIR /App
-COPY . ./
-RUN dotnet publish src/Transaction.Monitor.HttpApi.Host/Transaction.Monitor.HttpApi.Host.csproj -o bin/HttpApi
-
-WORKDIR bin/HttpApi
-ENTRYPOINT ["dotnet", "Transaction.Monitor.HttpApi.Host.dll"]

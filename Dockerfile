@@ -1,0 +1,5 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0
+
+ARG servicename
+WORKDIR /app
+COPY out/$servicename .
