@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Com.Ctrip.Framework.Apollo.Logging;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -33,6 +35,19 @@ public class Program
                         .WriteTo.Async(c => c.File("Logs/logs.txt"))
                         .WriteTo.Async(c => c.Console())
                         .WriteTo.Async(c => c.AbpStudio(services));
+                }).ConfigureAppConfiguration(
+                    (_, builder) => { builder.AddJsonFile("appsettings.apollo.json"); })
+                .ConfigureAppConfiguration((_, builder) =>
+                {
+                    if (!builder.Build().GetValue<bool>("IsApolloEnabled", false))
+                    {
+                        return;
+                    }
+                    //To display the Apollo console logs 
+                    #if DEBUG
+                    LogManager.UseConsoleLogging(Com.Ctrip.Framework.Apollo.Logging.LogLevel.Trace);
+                    #endif
+                    builder.AddApollo(builder.Build().GetSection("apollo"));
                 });
             await builder.AddApplicationAsync<MonitorHttpApiHostModule>();
             var app = builder.Build();
