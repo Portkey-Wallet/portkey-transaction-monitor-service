@@ -45,12 +45,15 @@ public class TransactionHistoryProvider :
 
     public async Task<bool> UpdateStatus(TransactionHistoryDto input)
     {
-        TransactionHistory transactionHistory =
-            await Repository.FindAsync(p => p.Tx == input.Tx);
+        List<TransactionHistory> list =
+            await Repository.GetListAsync(p => p.Tx == input.Tx);
 
-        transactionHistory.Status = input.Status;
-        transactionHistory.RetryTimes += 1;
-        await Repository.UpdateAsync(transactionHistory);
+        foreach (var transactionHistory in list)
+        {
+            transactionHistory.Status = input.Status;
+            transactionHistory.RetryTimes += 1;
+            await Repository.UpdateAsync(transactionHistory);
+        }
 
         return true;
     }
