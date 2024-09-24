@@ -34,6 +34,11 @@ public class GuardKeyProvider :
 
     public async Task<string> CreateGuardKey(CreateGuardKeyDto input)
     {
+        GuardKey guardKey = await Repository.FindAsync(p => p.AppId == input.AppId);
+        if (null != guardKey)
+        {
+            return "The appId already exists.";
+        }
         string Key = AesHelper.GenerateKey();
         GuardKey entity = new GuardKey { AppId = input.AppId, Key = Key };
         await Repository.InsertAsync(entity, autoSave: true);

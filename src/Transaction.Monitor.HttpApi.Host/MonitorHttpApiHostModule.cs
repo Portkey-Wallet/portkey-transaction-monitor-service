@@ -1,12 +1,14 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.RateLimiting;
 using OpenIddict.Validation.AspNetCore;
 using Transaction.Monitor.MongoDB;
 using Transaction.Monitor.MultiTenancy;
@@ -24,6 +26,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 using Transaction.Monitor.AddressConfigs;
+using Transaction.Monitor.Common;
 using Transaction.Monitor.GuardKeys;
 using Transaction.Monitor.Options;
 using Transaction.Monitor.Scans;
@@ -59,6 +62,15 @@ public class MonitorHttpApiHostModule : AbpModule
         context.Services.AddHostedService<RetryCallbackService>();
         context.Services.AddScoped<CallbackService>();
         context.Services.AddHostedService<ScanTransactionService>();
+        context.Services.AddRateLimiter(_ => _
+            .AddSlidingWindowLimiter(policyName: RateLimitConstant.SendTxPolicy, options =>
+            {
+                options.PermitLimit = RateLimitConstant.SendTxPermitLimit;
+                options.Window = TimeSpan.FromSeconds(RateLimitConstant.SendTxWindow);
+                options.SegmentsPerWindow = RateLimitConstant.SendTxSegmentsPerWindow;
+                options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+                options.QueueLimit = RateLimitConstant.SendTxQueueLimit;
+            }));
 
         PreConfigure<OpenIddictBuilder>(builder =>
         {
@@ -202,6 +214,7 @@ public class MonitorHttpApiHostModule : AbpModule
         app.UseStaticFiles();
         app.UseAbpStudioLink();
         app.UseRouting();
+        app.UseRateLimiter();
         app.UseAbpSecurityHeaders();
         app.UseCors();
         app.UseAuthentication();

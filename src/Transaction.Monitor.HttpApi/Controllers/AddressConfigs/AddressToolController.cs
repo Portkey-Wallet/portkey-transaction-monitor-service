@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Newtonsoft.Json;
 using Serilog;
 using Transaction.Monitor.AddressConfigs;
@@ -58,6 +59,25 @@ public class AddressToolController : AbpController
             Signature = signature
         };
         return ResultDto<ParamDto<AddressConfigListDto>>.SuccessResult(r);
+    }
+
+
+    [HttpPost("checkCallback")]
+    public virtual ResultDto<bool> CheckCallback(TransactionHistoryCallCheckDto input)
+    {
+        Log.Information($"checkCallback input = {JsonSerializer.Serialize(input)}");
+
+        TransactionHistoryCallDto callDto = new TransactionHistoryCallDto
+        {
+            Tx = input.Tx,
+            Amount = input.Amount,
+            FromAddress = input.FromAddress,
+            Symbol = input.Symbol,
+            ToAddress = input.FromAddress
+        };
+        
+        string signature = AesHelper.Encrypt(JsonSerializer.Serialize(callDto), input.Key);
+        return ResultDto<bool>.SuccessResult(signature.Equals(input.Signature));
     }
 
     [HttpPost("callback")]

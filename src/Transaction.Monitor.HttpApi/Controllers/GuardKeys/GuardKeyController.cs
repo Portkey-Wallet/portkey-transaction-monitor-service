@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Transaction.Monitor.Common;
 using Transaction.Monitor.GuardKeys;
 using Volo.Abp;
@@ -13,6 +14,8 @@ namespace Transaction.Monitor.Controllers.GuardKeys;
 [Area("app")]
 [ControllerName("GuardKey")]
 [Route("api/guardKey")]
+[EnableRateLimiting(RateLimitConstant.SendTxPolicy)]
+
 public class GuardKeyController : AbpController
 {
     private IGuardKeyAppService _guardKeyAppService;
