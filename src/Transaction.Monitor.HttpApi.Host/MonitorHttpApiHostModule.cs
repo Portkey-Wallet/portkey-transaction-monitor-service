@@ -216,7 +216,7 @@ public class MonitorHttpApiHostModule : AbpModule
         app.UseRouting();
         app.UseRateLimiter();
         app.UseAbpSecurityHeaders();
-        app.UseCors();
+        app.UseCors("AllowAll");
         app.UseAuthentication();
         app.UseAbpOpenIddictValidation();
 
