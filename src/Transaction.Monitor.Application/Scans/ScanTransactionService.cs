@@ -18,6 +18,7 @@ using Transaction.Monitor.Options;
 using Transaction.Monitor.ScanHeights.Provider;
 using Transaction.Monitor.TransactionHistorys;
 using Transaction.Monitor.TransactionHistorys.Provider;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Transaction.Monitor.Scans;
 
@@ -198,7 +199,7 @@ public class ScanTransactionService
         });
         TransferInfoResponse resp = graphQLResponse.Data;
         List<TransactionHistoryDto> historyList = getFromGQL(resp);
-        Log.Information($"Scan getHistoryList {chainId} {from} to {to} transaction size = {historyList.Count}");
+        Log.Information($"Scan getHistoryList {chainId} {from} to {to} transaction size = {historyList.Count} historyList = {JsonSerializer.Serialize(historyList)}");
 
         return historyList;
     }

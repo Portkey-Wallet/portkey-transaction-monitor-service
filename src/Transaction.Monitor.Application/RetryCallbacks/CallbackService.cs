@@ -30,6 +30,7 @@ public class CallbackService
     {
         try
         {
+            Log.Information($"RetryHistory history = {JsonSerializer.Serialize(history)} config = {config.AppId} {config.ToAddress} {config.CallbackUrl}");
             history.FromAddress = AddressHelper.FormatFromAddress(history.FromAddress, config.ToAddress);
             
             GuardKeyDto key = await _guardKeyProvider.MustGetGuardKey(config.AppId);
@@ -64,7 +65,7 @@ public class CallbackService
         }
         catch (Exception e)
         {
-            Log.Error(e, $"callback {url} has error");
+            Log.Error(e, $"callback {url} has error",e.Message);
             return false;
         }
     }
