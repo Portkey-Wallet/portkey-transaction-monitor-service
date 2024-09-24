@@ -2,6 +2,7 @@ using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace Transaction.Monitor.Common;
 
@@ -15,11 +16,12 @@ public static class HttpHelper
         if (response.IsSuccessStatusCode)
         {
             string result = await response.Content.ReadAsStringAsync();
+            Log.Information($"HttpPost {url} {result}");
             return result;
         }
         else
         {
-            Console.WriteLine("HttpPost Error: " + response.StatusCode);
+            Log.Information($"HttpPost {url} IsSuccessStatusCode {response.IsSuccessStatusCode}");
         }
 
         return "";

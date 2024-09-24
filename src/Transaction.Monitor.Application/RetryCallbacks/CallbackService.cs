@@ -65,7 +65,7 @@ public class CallbackService
         }
         catch (Exception e)
         {
-            Log.Error(e, $"callback {url} has error",e.Message);
+            Log.Error(e, $"callback {url} has error {e.Message}");
             return false;
         }
     }

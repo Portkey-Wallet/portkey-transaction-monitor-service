@@ -199,7 +199,7 @@ public class ScanTransactionService
         });
         TransferInfoResponse resp = graphQLResponse.Data;
         List<TransactionHistoryDto> historyList = getFromGQL(resp);
-        Log.Information($"Scan getHistoryList {chainId} {from} to {to} transaction size = {historyList.Count} historyList = {JsonSerializer.Serialize(historyList)}");
+        Log.Information($"Scan getHistoryList {chainId} {from} to {to} transaction size = {historyList.Count}");
 
         return historyList;
     }
@@ -214,6 +214,8 @@ public class ScanTransactionService
 
         foreach (var item in resp.transferInfoByBlock.Items)
         {
+            Log.Information($"Scan getHistoryList getFromGQL {item.TransactionId}");
+
             TransactionHistoryDto dto = new TransactionHistoryDto();
             dtoList.Add(dto);
             dto.Tx = item.TransactionId;
