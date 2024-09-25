@@ -11,6 +11,7 @@ public class TransactionHistory: AuditedAggregateRoot<Guid>
     public string FromAddress { get; set; }
     public string Symbol { get; set; }
     public string Amount { get; set; }
+    public string Memo { get; set; }
     public int Status { get; set; }
     public int RetryTimes { get; set; }
 }

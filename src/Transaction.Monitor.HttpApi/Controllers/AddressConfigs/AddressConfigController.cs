@@ -36,7 +36,7 @@ public class AddressConfigController : AbpController
         catch (Exception e)
         {
             Log.Error(e, "addConfig exist error, input:{input}", input);
-            return ResultDto<bool>.FailureResult("");
+            return ResultDto<bool>.FailureResult(e.Message);
         }
     }
 
@@ -51,7 +51,7 @@ public class AddressConfigController : AbpController
         catch (Exception e)
         {
             Log.Error(e, "update exist error, input:{input}", input);
-            return ResultDto<AddressConfigDto>.FailureResult("");
+            return ResultDto<AddressConfigDto>.FailureResult(e.Message);
         }
     }
 
@@ -66,7 +66,7 @@ public class AddressConfigController : AbpController
         catch (Exception e)
         {
             Log.Error(e, "getList exist error, input:{input}", input);
-            return ResultDto<List<AddressConfigDto>>.FailureResult("");
+            return ResultDto<List<AddressConfigDto>>.FailureResult(e.Message);
         }
     }
 }

@@ -182,6 +182,7 @@ public class ScanTransactionService
                                     to,
                                     method,
                                     amount,
+                                    memo,
                                     formatAmount
                                     token {symbol, collectionSymbol, type, decimals}
                                 }
@@ -224,6 +225,7 @@ public class ScanTransactionService
             dto.ToAddress = item.To;
             dto.Symbol = item.Token.Symbol;
             dto.Amount = item.FormatAmount;
+            dto.Memo = item.Memo;
             dto.Status = 0;
             dto.RetryTimes = 0;
         }

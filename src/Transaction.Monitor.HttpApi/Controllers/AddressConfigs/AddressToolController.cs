@@ -73,7 +73,8 @@ public class AddressToolController : AbpController
             Amount = input.Amount,
             FromAddress = input.FromAddress,
             Symbol = input.Symbol,
-            ToAddress = input.FromAddress
+            ToAddress = input.FromAddress,
+            Memo = input.Memo
         };
         
         string signature = AesHelper.Encrypt(JsonSerializer.Serialize(callDto), input.Key);

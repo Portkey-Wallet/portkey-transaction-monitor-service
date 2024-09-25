@@ -22,6 +22,7 @@ public class Item
     public string To { get; set; }
     public string Method { get; set; }
     public decimal Amount { get; set; }
+    public string Memo { get; set; }
     public string FormatAmount { get; set; }
     public Token Token { get; set; }
 }

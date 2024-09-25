@@ -7,4 +7,5 @@ public class TransactionHistoryCallDto
     public string FromAddress { get; set; }
     public string Symbol { get; set; }
     public string Amount { get; set; }
+    public string Memo { get; set; }
 }
