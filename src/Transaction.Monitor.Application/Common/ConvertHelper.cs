@@ -44,6 +44,7 @@ public static class ConvertHelper
             Symbol = input.Symbol,
             Amount = input.Amount,
             Status = input.Status,
+            Memo = input.Memo,
             RetryTimes = input.RetryTimes
         };
     }
@@ -59,6 +60,7 @@ public static class ConvertHelper
             Symbol = input.Symbol,
             Amount = input.Amount,
             Status = input.Status,
+            Memo = input.Memo,
             RetryTimes = input.RetryTimes
         };
     }
@@ -72,6 +74,7 @@ public static class ConvertHelper
             FromAddress = input.FromAddress,
             Symbol = input.Symbol,
             Amount = input.Amount,
+            Memo = input.Memo,
         };
     }
 }
