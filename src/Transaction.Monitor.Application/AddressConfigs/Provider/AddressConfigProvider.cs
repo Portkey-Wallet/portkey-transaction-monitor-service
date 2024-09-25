@@ -41,6 +41,13 @@ public class AddressConfigProvider :
 
     public async Task<bool> InsertConfig(CreateAddressConfigDto input)
     {
+        AddressConfig exits =
+            await Repository.FindAsync(p => p.ToAddress == input.ToAddress);
+        if (exits != null)
+        {
+            return false;
+        }
+        
         AddressConfig addressConfig = ConvertHelper.AddressConfigFromCreateDto(input);
         await Repository.InsertAsync(addressConfig, autoSave: true);
 
@@ -49,6 +56,13 @@ public class AddressConfigProvider :
 
     public async Task<AddressConfigDto> UpdateConfig(UpdateAddressConfigDto input)
     {
+        AddressConfig exits =
+            await Repository.FindAsync(p => p.ToAddress == input.ReviseToAddress);
+        if (exits != null)
+        {
+            return null;
+        }
+        
         AddressConfig addressConfig =
             await Repository.FindAsync(p => p.AppId == input.AppId && p.ToAddress == input.ToAddress);
         if (null == addressConfig)
