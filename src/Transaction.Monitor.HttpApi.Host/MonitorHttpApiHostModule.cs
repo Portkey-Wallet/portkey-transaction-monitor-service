@@ -81,6 +81,16 @@ public class MonitorHttpApiHostModule : AbpModule
                 options.UseAspNetCore();
             });
         });
+        context.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll",
+                builder =>
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+        });
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -99,7 +109,6 @@ public class MonitorHttpApiHostModule : AbpModule
         ConfigureConventionalControllers();
         ConfigureSwagger(context, configuration);
         ConfigureVirtualFileSystem(context);
-        ConfigureCors(context, configuration);
     }
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)
