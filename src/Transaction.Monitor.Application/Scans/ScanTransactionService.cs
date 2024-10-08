@@ -18,6 +18,7 @@ using Transaction.Monitor.Options;
 using Transaction.Monitor.ScanHeights.Provider;
 using Transaction.Monitor.TransactionHistorys;
 using Transaction.Monitor.TransactionHistorys.Provider;
+using ChainInfo = Transaction.Monitor.TransactionHistorys.ChainInfo;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Transaction.Monitor.Scans;
@@ -99,16 +100,22 @@ public class ScanTransactionService
             string baseUrl = scanParams.baseUrl;
 
             long beginHeight = await _scanHeightProvider.GetHeight(chainId);
-            long endHeight = await getLatestHeight(chainId);
-            Log.Information($"Scan ${chainId} {beginHeight} {endHeight}");
-
-            if (beginHeight == 0)
+            ChainInfo chainInfo = await getLatestHeight(chainId);
+            if (null == chainInfo)
             {
-                await _scanHeightProvider.UpdateHeight(chainId, endHeight);
+                Log.Error($"Scan ${chainId} chainInfo is null");
                 return;
             }
 
-            if (beginHeight == endHeight)
+            Log.Information($"Scan ${chainId} {beginHeight} {JsonSerializer.Serialize(chainInfo)}");
+
+            if (beginHeight == 0)
+            {
+                await _scanHeightProvider.UpdateHeight(chainId, chainInfo.BestChainHeight);
+                return;
+            }
+
+            if (beginHeight == chainInfo.BestChainHeight)
             {
                 return;
             }
@@ -116,7 +123,7 @@ public class ScanTransactionService
             List<AddressConfigDto> configList = await _addressConfigProvider.GetAll();
             if (configList?.Count == 0)
             {
-                Log.Information($"Scan ${chainId} {beginHeight} {endHeight} config list is null");
+                Log.Information($"Scan ${chainId} {beginHeight} {chainInfo.BestChainHeight} config list is null");
                 return;
             }
 
@@ -124,12 +131,14 @@ public class ScanTransactionService
             List<string> addressList = configList.Select(p => AddressHelper.FormatAddress(p.ToAddress)).ToList();
             while (true)
             {
-                List<TransactionHistoryDto> historyList = await getHistoryList(chainId, beginHeight, endHeight, addressList);
+                List<TransactionHistoryDto> historyList = await getHistoryList(chainId, beginHeight, chainInfo.BestChainHeight, addressList);
                 if (historyList.Count == 0)
                 {
                     return;
                 }
-                beginHeight = handleHistoryList(chainId, historyList, configList);
+
+                List<TransactionHistoryDto> filteredList = filterLargeAmount(historyList, chainInfo);
+                beginHeight = handleHistoryList(chainId, filteredList, configList);
             }
         }
         catch (Exception e)
@@ -156,6 +165,7 @@ public class ScanTransactionService
 
             Task.Run(() => _callbackService.RetryHistory(history, config));
         }
+
         return updateHeight;
     }
 
@@ -233,18 +243,33 @@ public class ScanTransactionService
         return dtoList;
     }
 
-    private async Task<long> getLatestHeight(string chainId)
+    private async Task<ChainInfo> getLatestHeight(string chainId)
     {
         string resp = await HttpHelper.HttpGet(_chainOptions.IndexerUrl);
         IndexerResponse indexerResponse = JsonConvert.DeserializeObject<IndexerResponse>(resp);
         foreach (var info in indexerResponse.CurrentVersion.Items)
         {
-            if (string.Equals(info.ChainId,chainId, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(info.ChainId, chainId, StringComparison.OrdinalIgnoreCase))
             {
-                return _chainOptions.LIB ? info.LastIrreversibleBlockHeight : info.BestChainHeight;
+                return info;
             }
         }
 
-        return 0L;
+        return null;
+    }
+
+    private List<TransactionHistoryDto> filterLargeAmount(List<TransactionHistoryDto> historyList, ChainInfo chainInfo)
+    {
+        var filterBN = historyList.Where(p =>
+        {
+            return ScanConstant.LARGE_AMOUNT.ContainsKey(p.Symbol)
+                   && ScanConstant.LARGE_AMOUNT[p.Symbol] < decimal.Parse(p.Amount);
+        }).ToList();
+        if (filterBN.Count == 0)
+        {
+            return historyList;
+        }
+
+        return historyList.Where(p => p.BlockNumber <= chainInfo.LastIrreversibleBlockHeight).ToList();
     }
 }
